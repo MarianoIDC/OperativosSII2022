@@ -22,7 +22,7 @@ int main() {
 
     struct sockaddr_in servAddr;
     FILE *fp;
-    char *filename = "../send.txt";
+    char *filename = "./send.txt";
 
     if(sockD < 0) {
         perror("Error in sockets!\n");
