@@ -1,0 +1,11 @@
+[Unit]
+Description=<description_about_your_service>
+
+[Service]
+User=<user_such_as_root>
+WorkingDirectory=<directory_of__your_script such as /home/unixcop>
+ExecStart=<script_which_needs_to_be_executed>
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
