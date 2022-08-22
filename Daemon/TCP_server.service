@@ -2,9 +2,9 @@
 Description=Server that recieves the file to count consonants
 
 [Service]
-User=<user_such_as_root>
+User=mariano
 WorkingDirectory=/home/mariano/Documents/OperativosSII2022/Servidor
-ExecStart=DocServer
+ExecStart=/home/mariano/Documents/OperativosSII2022/DocServer
 Restart=always
 
 [Install]
