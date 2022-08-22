@@ -1,10 +1,10 @@
 [Unit]
-Description=<description_about_your_service>
+Description=Server that recieves the file to count consonants
 
 [Service]
 User=<user_such_as_root>
-WorkingDirectory=<directory_of__your_script such as /home/unixcop>
-ExecStart=<script_which_needs_to_be_executed>
+WorkingDirectory=/home/mariano/Documents/OperativosSII2022/Servidor
+ExecStart=DocServer
 Restart=always
 
 [Install]
