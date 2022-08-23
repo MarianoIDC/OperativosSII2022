@@ -18,26 +18,11 @@ void send_file(FILE *file, int socket) {
     }
 }
 
-int main() {
+int DocClient(char* ip, int port, const char* filename) {
     int sockD = socket(AF_INET, SOCK_STREAM, 0);
 
     struct sockaddr_in servAddr;
     FILE *fp;
-
-    //Parámetros a pedirle al usuario
-    char *filename = "./send.txt";
-    char *ip = "172.18.0.1";
-    int port = 8080;
-
-    //Se pide al usuario los parámetros del cliente
-/*  printf("Enter the file: ");
-    scanf("\n%c", filename);
-
-    printf("Enter the IP: \n");
-    scanf("%c", ip);
-
-    printf("Enter the port: \n");
-    scanf("%d", &port);*/
 
     if(sockD < 0) {
         perror("Error in sockets!\n");
@@ -77,6 +62,27 @@ int main() {
     printf("Message: %d\n", received_int);
 
     close(sockD);
+}
+
+int main(int argc, char const* argv[]) {
+    
+    if (argc == 4)
+    {
+        char *ip = argv[1];
+        char *port = argv[2];
+        const char* filename = argv[3];
+        //char *format = argv[3];
+        int PORT = atoi(port);
+        //int extension=detect_format(format);
+        //printf("Extension %d",extension);
+        //return client(filename, pixels, extension);
+        return DocClient(ip, PORT, filename);
+
+    }
+    else
+    {
+        printf("[-]Invalid number of argument, usage is %s [IPSERVER] [PORT] [FILENAME] \n",argv[0]);
+    }
 
     return 0;
 }
