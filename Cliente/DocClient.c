@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <sys/socket.h> //for socket APIs
 #include <string.h>
+#include <arpa/inet.h> 
 #define SIZE 1024
 
 void send_file(FILE *file, int socket) {
@@ -22,7 +23,21 @@ int main() {
 
     struct sockaddr_in servAddr;
     FILE *fp;
+
+    //Parámetros a pedirle al usuario
     char *filename = "./send.txt";
+    char *ip = "172.18.0.1";
+    int port = 8080;
+
+    //Se pide al usuario los parámetros del cliente
+/*  printf("Enter the file: ");
+    scanf("\n%c", filename);
+
+    printf("Enter the IP: \n");
+    scanf("%c", ip);
+
+    printf("Enter the port: \n");
+    scanf("%d", &port);*/
 
     if(sockD < 0) {
         perror("Error in sockets!\n");
@@ -30,8 +45,8 @@ int main() {
     }
 
     servAddr.sin_family = AF_INET;
-    servAddr.sin_port = 8080;
-    servAddr.sin_addr.s_addr = INADDR_ANY;
+    servAddr.sin_port = port;
+    servAddr.sin_addr.s_addr = inet_addr(ip);
 
     printf("Client socket created!\n");
 

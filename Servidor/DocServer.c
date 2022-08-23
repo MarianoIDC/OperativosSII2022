@@ -3,11 +3,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h> //for socket APIs
+#include <arpa/inet.h> 
 #define SIZE 1024
 
 void write_file(char *buffer) {
     FILE *fp;
-    char *filename = "../recv.txt";
+    char *filename = "./recv.txt";
     fp = fopen(filename, "w");
     if (fp == NULL) {
         perror("Error in creating file!\n");
@@ -55,7 +56,7 @@ int main(int argc, char const* argv[])
 
     servAddr.sin_family = AF_INET;
     servAddr.sin_port = 8080;
-    servAddr.sin_addr.s_addr = INADDR_ANY;
+    servAddr.sin_addr.s_addr = inet_addr("172.18.0.1");
 
     printf("Server socket created!\n");
 
@@ -81,29 +82,32 @@ int main(int argc, char const* argv[])
 
     // integer to hold client socket.
     addrSize = sizeof(newAddr);
-    int clientSocket = accept(servSockD, (struct sockaddr*)&newAddr, &addrSize);
 
-    // send messages to client socket
-    int n = recv(clientSocket, serMsg, SIZE, 0);
+    do {
 
-    char *buffer = serMsg;
+        int clientSocket = accept(servSockD, (struct sockaddr*)&newAddr, &addrSize);
 
-    printf("Buffer: %s\n", buffer);
+        // send messages to client socket
+        int n = recv(clientSocket, serMsg, SIZE, 0);
 
-    write_file(buffer);
+        char *buffer = serMsg;
 
-    int consonants = count_consonants(buffer);
+        printf("Buffer: %s\n", buffer);
 
-    printf("Consonants: %d\n", consonants);
+        write_file(buffer);
 
-    int send_int = htonl(consonants);
+        int consonants = count_consonants(buffer);
 
-    printf("Message: %d\n", send_int);
+        printf("Consonants: %d\n", consonants);
 
-    send(clientSocket, &consonants, sizeof(serMsg), 0);
+        int send_int = htonl(consonants);
 
-    bzero(buffer, SIZE);
+        printf("Message: %d\n", send_int);
 
-    return 0;
+        send(clientSocket, &consonants, sizeof(serMsg), 0);
+
+        bzero(buffer, SIZE);
+
+    } while(1);
 }
 
