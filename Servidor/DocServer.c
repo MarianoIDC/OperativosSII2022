@@ -6,6 +6,21 @@
 #include <arpa/inet.h> 
 #define SIZE 1024
 
+void write_log(char *log){
+    
+    FILE *log_file; 
+    log_file = fopen("./log.txt", "w");
+ 
+    if (NULL == log_file) {
+        printf("file can't be opened \n");
+    }
+    printf("Escribiendo en el Log\n");
+    printf("%s\n", log);
+    fprintf(log_file, ">>>>>> %s\n", log); // write to file
+
+    printf("Se supone que ya se escribio\n");
+}
+
 void write_file(char *buffer) {
     FILE *fp;
     char *filename = "./recv.txt";
@@ -50,15 +65,19 @@ int main(int argc, char const* argv[])
     socklen_t addrSize;
 
     if(servSockD < 0) {
-        perror("Error in sockets!\n");
+        char *error = "Error in sockets!\n";
+        perror(error);
+        // write_file(error);
         exit(1);
     }
 
     servAddr.sin_family = AF_INET;
     servAddr.sin_port = 8080;
-    servAddr.sin_addr.s_addr = inet_addr("172.18.0.1");
+    servAddr.sin_addr.s_addr = inet_addr("192.168.0.5");
 
-    printf("Server socket created!\n");
+    char *message_1 = "Server socket created!";
+    printf("%s\n", message_1);
+    write_log(message_1);
 
     // bind socket to the specified IP and port
     int e = bind(servSockD, (struct sockaddr*)&servAddr, sizeof(servAddr));
@@ -91,7 +110,7 @@ int main(int argc, char const* argv[])
         int n = recv(clientSocket, serMsg, SIZE, 0);
 
         char *buffer = serMsg;
-
+        
         printf("Buffer: %s\n", buffer);
 
         write_file(buffer);
