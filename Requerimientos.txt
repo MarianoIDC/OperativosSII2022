@@ -1,0 +1,7 @@
+Requirimientos>>>>
+
+Servidor
+
+	Se ejecuta en una maquina virtual
+	Sistema Operativo basado en Linux
+	Recibe archivos de manera secuencial
