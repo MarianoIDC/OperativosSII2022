@@ -18,7 +18,10 @@ void send_file(FILE *file, int socket) {
     }
 }
 
-int DocClient(char* ip, int port, const char* filename) {
+int DocClient(char* ip, int port) {
+
+    printf("############################\n");
+
     int sockD = socket(AF_INET, SOCK_STREAM, 0);
 
     struct sockaddr_in servAddr;
@@ -35,53 +38,72 @@ int DocClient(char* ip, int port, const char* filename) {
 
     printf("Client socket created!\n");
 
-    int e = connect(sockD, (struct sockaddr*)&servAddr, sizeof(servAddr));
+        int e = connect(sockD, (struct sockaddr*)&servAddr, sizeof(servAddr));
 
-    if(e == -1) {
-        perror("Error in connection!\n");
-        exit(1);
-    }
+        if(e == -1) {
+            perror("Error in connection!\n");
+            exit(1);
+        }
 
-    printf("Connection successful!\n");
+        printf("Connection successful!\n");
+    do{
+        char *filename;
+        char end = 'end';
 
-    fp = fopen(filename, "r");
+        printf("Ingrese la ruta del archivo:\n");
+        scanf("%s", filename);
 
-    if (fp == NULL) {
-        perror("Error opening file!\n");
-        exit(1);
-    }
+        int comparasion = strcmp(filename, &end);
 
-    send_file(fp, sockD);
+        printf("%d\n", comparasion);
 
-    printf("Successful!\n");
+        if(comparasion==1){
+            close(sockD);
+            break;
+        }else{
 
-    int received_int = 0;
+            fp = fopen(filename, "r");
 
-    recv(sockD, &received_int, sizeof(received_int), 0);
+            if (fp == NULL) {
+                perror("Error opening file!\n");
+            }else{
+                send_file(fp, sockD);
 
-    printf("Message: %d\n", received_int);
+                printf("Successful!\n");
 
-    close(sockD);
+                int received_int = 0;
+
+                recv(sockD, &received_int, sizeof(received_int), 0);
+
+                printf("Message: %d\n", received_int);
+
+                
+            }
+
+            printf("############################\n");
+
+        }
+    }while(1);
+    
 }
 
 int main(int argc, char const* argv[]) {
     
-    if (argc == 4)
-    {
+    char *data;
+
+    if (argc == 3){
         char *ip = argv[1];
         char *port = argv[2];
-        const char* filename = argv[3];
         //char *format = argv[3];
         int PORT = atoi(port);
         //int extension=detect_format(format);
         //printf("Extension %d",extension);
         //return client(filename, pixels, extension);
-        return DocClient(ip, PORT, filename);
-
+        return DocClient(ip, PORT);
     }
     else
     {
-        printf("[-]Invalid number of argument, usage is %s [IPSERVER] [PORT] [FILENAME] \n",argv[0]);
+        printf("[-]Invalid number of argument, usage is %s [IPSERVER] [PORT]\n",argv[0]);
     }
 
     return 0;
