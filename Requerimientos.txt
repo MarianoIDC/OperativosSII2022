@@ -5,3 +5,20 @@ Servidor
 	Se ejecuta en una maquina virtual
 	Sistema Operativo basado en Linux
 	Recibe archivos de manera secuencial
+	Retorna la cantidad de consonantes
+	Retorna las llamadas al sistema (Duracion)
+	Devuelve al cliente 
+	Archivo de Configuracion
+	Archivo de eventos (Log)
+	El servidor inicia cuando se inicia la maquina
+	Implementa las funciones de start, stop, restart y status
+
+Cliente
+	
+	El cliente se ejecuta en un contenedor
+	Envia el documento
+	El usuario dijita end para parar el servicio
+	Recibe la respuesta del servidor y al muestra
+	Se configura la ruta del documento, el puerto y la IP
+
+
