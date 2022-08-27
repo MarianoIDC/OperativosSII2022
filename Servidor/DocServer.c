@@ -100,7 +100,6 @@ int main(int argc, char const* argv[])
         perror("Error in listening!\n");
         exit(1);
     }
-
     // integer to hold client socket.
     addrSize = sizeof(newAddr);
 
@@ -112,23 +111,16 @@ int main(int argc, char const* argv[])
         int n = recv(clientSocket, serMsg, SIZE, 0);
 
         char *buffer = serMsg;
-        
+ 
         printf("Buffer: %s\n", buffer);
-
         write_file(buffer);
-
         int consonants = count_consonants(buffer);
-
         printf("Consonants: %d\n", consonants);
-
         int send_int = htonl(consonants);
-
         printf("Message: %d\n", send_int);
-
         send(clientSocket, &consonants, sizeof(serMsg), 0);
-
         bzero(buffer, SIZE);
-
+        
     } while(1);
 }
 

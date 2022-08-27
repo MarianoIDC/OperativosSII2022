@@ -4,7 +4,7 @@ Servidor
 
 X	Se ejecuta en una maquina virtual
 X	Sistema Operativo basado en Linux
-	Recibe archivos de manera secuencial
+X	Recibe archivos de manera secuencial
 X	Retorna la cantidad de consonantes
 	Retorna las llamadas al sistema (Duracion)
 X	Devuelve al cliente 
@@ -17,8 +17,8 @@ Cliente
 	
 X	El cliente se ejecuta en un contenedor
 X	Envia el documento
-	El usuario dijita end para parar el servicio
-	Recibe la respuesta del servidor y al muestra
+X	El usuario dijita end para parar el servicio
+X	Recibe la respuesta del servidor y al muestra
 X	Se configura la ruta del documento, el puerto y la IP
 
 

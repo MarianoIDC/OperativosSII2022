@@ -48,20 +48,17 @@ int DocClient(char* ip, int port) {
         printf("Connection successful!\n");
     do{
         char *filename;
-        char end = 'end';
+        char end[] = "end";
 
         printf("Ingrese la ruta del archivo:\n");
         scanf("%s", filename);
 
         int comparasion = strcmp(filename, &end);
-
-        printf("%d\n", comparasion);
-
-        if(comparasion==1){
+        
+        if(comparasion==0){
             close(sockD);
-            break;
+            exit(0);
         }else{
-
             fp = fopen(filename, "r");
 
             if (fp == NULL) {
@@ -76,12 +73,8 @@ int DocClient(char* ip, int port) {
                 recv(sockD, &received_int, sizeof(received_int), 0);
 
                 printf("Message: %d\n", received_int);
-
-                
             }
-
             printf("############################\n");
-
         }
     }while(1);
     
@@ -94,11 +87,7 @@ int main(int argc, char const* argv[]) {
     if (argc == 3){
         char *ip = argv[1];
         char *port = argv[2];
-        //char *format = argv[3];
         int PORT = atoi(port);
-        //int extension=detect_format(format);
-        //printf("Extension %d",extension);
-        //return client(filename, pixels, extension);
         return DocClient(ip, PORT);
     }
     else
