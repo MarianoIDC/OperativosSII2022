@@ -73,7 +73,9 @@ int main(int argc, char const* argv[])
 
     servAddr.sin_family = AF_INET;
     servAddr.sin_port = 8080;
-    servAddr.sin_addr.s_addr = inet_addr("192.168.0.5");
+    // servAddr.sin_addr.s_addr = inet_addr("192.168.122.180");
+    servAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+
 
     char *message_1 = "Server socket created!";
     printf("%s\n", message_1);
