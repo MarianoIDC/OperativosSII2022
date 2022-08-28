@@ -21,29 +21,31 @@ void send_file(FILE *file, int socket) {
     }
     // closing the file
     bzero(data, SIZE);
+    printf("Archivo enviado\n");
     fclose(file);
 }
 
-int DocClient(char* ip, int port) {
+void DocClient(char* ip, int port) {
 
     printf("############################\n");
 
-    int sockD = socket(AF_INET, SOCK_STREAM, 0);
-
     struct sockaddr_in servAddr;
     FILE *fp;
+    
+    do{
+        int sockD = socket(AF_INET, SOCK_STREAM, 0);
+        
+        if(sockD < 0) {
+            perror("Error in sockets!\n");
+            exit(1);
+        }
 
-    if(sockD < 0) {
-        perror("Error in sockets!\n");
-        exit(1);
-    }
+        servAddr.sin_family = AF_INET;
+        servAddr.sin_port = port;
+        servAddr.sin_addr.s_addr = inet_addr(ip);
 
-    servAddr.sin_family = AF_INET;
-    servAddr.sin_port = port;
-    servAddr.sin_addr.s_addr = inet_addr(ip);
-
-    printf("Client socket created!\n");
-
+        printf("Client socket created!\n");
+    
         int e = connect(sockD, (struct sockaddr*)&servAddr, sizeof(servAddr));
 
         if(e == -1) {
@@ -52,24 +54,24 @@ int DocClient(char* ip, int port) {
         }
 
         printf("Connection successful!\n");
-    do{
+        
         char *filename;
         char end[] = "end";
 
         printf("Ingrese la ruta del archivo:\n");
         scanf("%s", filename);
 
-        int comparasion = strcmp(filename, &end);
+        int comparacion = strcmp(filename, &end);
         
-        if(comparasion==0){
+        if(comparacion==0){
             close(sockD);
-            exit(0);
-        }else{
+            exit(1);
+        } else {
             fp = fopen(filename, "r");
 
             if (fp == NULL) {
                 perror("Error opening file!\n");
-            }else{
+            } else {
                 send_file(fp, sockD);
 
                 printf("Successful!\n");
@@ -92,7 +94,7 @@ int main(int argc, char const* argv[]) {
         char *ip = argv[1];
         char *port = argv[2];
         int PORT = atoi(port);
-        return DocClient(ip, PORT);
+        DocClient(ip, PORT);
     }
     else
     {

@@ -16,7 +16,7 @@ void write_log(char *log, char *filename){
     }
     printf("Escribiendo en el Log\n");
     printf("%s\n", log);
-    fprintf(log_file, "%s", log); // write to file
+    fprintf(log_file, "%s\n", log); // write to file
     printf("Se supone que ya se escribio\n");
 }
 
@@ -93,16 +93,18 @@ void DocServer() {
         perror("Error in listening!\n");
         exit(1);
     }
-    // integer to hold client socket.
-    addrSize = sizeof(newAddr);
+    int clientSocket;
 
     do {
-    	printf("Aquí empieza el ciclo!\n");
+	
+        // integer to hold client socket.
+        addrSize = sizeof(newAddr);
+        clientSocket = accept(servSockD, (struct sockaddr*)&newAddr, &addrSize);
+        printf("Socket aceptado\n");
+        
 	// string store data to send to client
     	char serMsg[SIZE];
-	
-        int clientSocket = accept(servSockD, (struct sockaddr*)&newAddr, &addrSize);
-
+    	
         // send messages to client socket
         int n = recv(clientSocket, serMsg, SIZE, 0);
 
@@ -114,13 +116,13 @@ void DocServer() {
              perror("Error in creating file!\n");
              exit(1);
         }
-        fprintf(fp, "%s", serMsg);
+        fprintf(fp, "%s\n", serMsg);
         
         int consonants = count_consonants(serMsg);
         printf("Consonants: %d\n", consonants);
-        send(clientSocket, &consonants, sizeof(serMsg), 0);
+        send(clientSocket, &consonants, sizeof(consonants), 0);
         bzero(serMsg, SIZE);
-        printf("Aquí termina el ciclo!\n");
+        printf("###############################\n");
         
     } while(1);
 }
