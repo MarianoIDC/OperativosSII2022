@@ -1,0 +1,1 @@
+docker stop DocClient; docker rm DocClient; docker rmi tcp:client; docker build -t tcp:client .; docker run -d --name DocClient tcp:client tail -f /dev/null;docker exec -it DocClient /bin/bash
