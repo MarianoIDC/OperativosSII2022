@@ -5,17 +5,23 @@
 #include <sys/socket.h> //for socket APIs
 #include <string.h>
 #include <arpa/inet.h> 
-#define SIZE 1024
+#define SIZE 8192
 
 void send_file(FILE *file, int socket) {
-    char data[SIZE] = {0};
+    /*fseek(file, 0L, SEEK_END);
+    // calculating the size of the file
+    long int size = ftell(file);
+    printf("Message: %d\n", size);*/
+    char data[SIZE];
     while (fgets(data, SIZE, file) != NULL) {
         if (send(socket, data, sizeof(data), 0) == -1) {
             perror("Error in sending data!\n");
             exit(1);
         }
-        bzero(data, SIZE);
     }
+    // closing the file
+    bzero(data, SIZE);
+    fclose(file);
 }
 
 int DocClient(char* ip, int port) {
@@ -81,8 +87,6 @@ int DocClient(char* ip, int port) {
 }
 
 int main(int argc, char const* argv[]) {
-    
-    char *data;
 
     if (argc == 3){
         char *ip = argv[1];

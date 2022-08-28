@@ -4,37 +4,25 @@
 #include <string.h>
 #include <sys/socket.h> //for socket APIs
 #include <arpa/inet.h> 
-#define SIZE 1024
+#define SIZE 8192
 
-void write_log(char *log){
+void write_log(char *log, char *filename){
     
     FILE *log_file; 
-    log_file = fopen("./log.txt", "w");
+    log_file = fopen(filename, "a");
  
     if (NULL == log_file) {
         printf("file can't be opened \n");
     }
     printf("Escribiendo en el Log\n");
     printf("%s\n", log);
-    fprintf(log_file, ">>>>>> %s\n", log); // write to file
-
+    fprintf(log_file, "%s", log); // write to file
     printf("Se supone que ya se escribio\n");
-}
-
-void write_file(char *buffer) {
-    FILE *fp;
-    char *filename = "./recv.txt";
-    fp = fopen(filename, "w");
-    if (fp == NULL) {
-        perror("Error in creating file!\n");
-        exit(1);
-    }
-    fprintf(fp, "%s", buffer);
 }
 
 int count_consonants(char *buffer) {
     int consonants = 0;
-    for (int i = 0; i < SIZE; ++i) {
+    for (int i = 0; i < strlen(buffer); ++i) {
         //printf("Buffer: %c\n", buffer[i]);
         if ((buffer[i] >= 65 && buffer[i] <= 90) || (buffer[i] >= 97 && buffer[i] <= 122)) {
             if (buffer[i] == 'a'|| buffer[i] =='e'|| buffer[i] =='i'|| buffer[i] == 'o' || buffer[i] == 'u' || buffer[i] == 'A' || buffer[i] == 'E' || buffer[i] == 'I' || buffer[i] == 'O' || buffer[i] == 'U') {
@@ -49,15 +37,24 @@ int count_consonants(char *buffer) {
     return consonants;
 }
 
-int main(int argc, char const* argv[])
-{
-
+void DocServer() {
     // create server socket similar to what was done in
     // client program
     int servSockD = socket(AF_INET, SOCK_STREAM, 0);
 
-    // string store data to send to client
-    char serMsg[SIZE];
+    int port;
+    
+    FILE *conf_fp;
+    
+    char log_filename[32];
+    
+    char recv_filename[32];
+    
+    conf_fp = fopen("./server.conf", "r");
+    
+    fscanf(conf_fp, "%d %s %s", &port, recv_filename, log_filename);
+    
+    fclose(conf_fp);
 
     // define server address
     struct sockaddr_in servAddr, newAddr;
@@ -72,15 +69,11 @@ int main(int argc, char const* argv[])
     }
 
     servAddr.sin_family = AF_INET;
-    servAddr.sin_port = 8080;
-    // servAddr.sin_addr.s_addr = inet_addr("192.168.122.180");
+    servAddr.sin_port = port;
     servAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-
-
+    
     char *message_1 = "Server socket created!";
-    printf("%s\n", message_1);
-    write_log(message_1);
-
+    write_log(message_1, log_filename);
     // bind socket to the specified IP and port
     int e = bind(servSockD, (struct sockaddr*)&servAddr, sizeof(servAddr));
 
@@ -104,23 +97,37 @@ int main(int argc, char const* argv[])
     addrSize = sizeof(newAddr);
 
     do {
-
+    	printf("Aquí empieza el ciclo!\n");
+	// string store data to send to client
+    	char serMsg[SIZE];
+	
         int clientSocket = accept(servSockD, (struct sockaddr*)&newAddr, &addrSize);
 
         // send messages to client socket
         int n = recv(clientSocket, serMsg, SIZE, 0);
 
-        char *buffer = serMsg;
- 
-        printf("Buffer: %s\n", buffer);
-        write_file(buffer);
-        int consonants = count_consonants(buffer);
+        printf("Buffer: %s\n", serMsg);
+        
+        FILE* fp;
+        fp = fopen(recv_filename, "a");
+        if (fp == NULL) {
+             perror("Error in creating file!\n");
+             exit(1);
+        }
+        fprintf(fp, "%s", serMsg);
+        
+        int consonants = count_consonants(serMsg);
         printf("Consonants: %d\n", consonants);
-        int send_int = htonl(consonants);
-        printf("Message: %d\n", send_int);
         send(clientSocket, &consonants, sizeof(serMsg), 0);
-        bzero(buffer, SIZE);
+        bzero(serMsg, SIZE);
+        printf("Aquí termina el ciclo!\n");
         
     } while(1);
+}
+
+int main(int argc, char const* argv[])
+{
+    DocServer();
+    return 0;
 }
 
