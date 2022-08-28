@@ -4,7 +4,7 @@
 #include <string.h>
 #include <sys/socket.h> //for socket APIs
 #include <arpa/inet.h> 
-#define SIZE 8192
+//#define SIZE 8192
 
 void write_log(char *log, char *filename){
     
@@ -101,12 +101,18 @@ void DocServer() {
         addrSize = sizeof(newAddr);
         clientSocket = accept(servSockD, (struct sockaddr*)&newAddr, &addrSize);
         printf("Socket aceptado\n");
+
+        int buffer_size = 0;
+        recv(clientSocket, &buffer_size, sizeof(buffer_size), 0);
+
+        printf("Size: %d\n", buffer_size);
+
         
 	// string store data to send to client
-    	char serMsg[SIZE];
+    	char serMsg[buffer_size];
     	
         // send messages to client socket
-        int n = recv(clientSocket, serMsg, SIZE, 0);
+        recv(clientSocket, serMsg, sizeof(serMsg), 0);
 
         printf("Buffer: %s\n", serMsg);
         
@@ -120,8 +126,11 @@ void DocServer() {
         
         int consonants = count_consonants(serMsg);
         printf("Consonants: %d\n", consonants);
+
         send(clientSocket, &consonants, sizeof(consonants), 0);
-        bzero(serMsg, SIZE);
+
+        bzero(serMsg, buffer_size);
+
         printf("###############################\n");
         
     } while(1);

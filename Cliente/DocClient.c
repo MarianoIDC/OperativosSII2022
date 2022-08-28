@@ -5,13 +5,9 @@
 #include <sys/socket.h> //for socket APIs
 #include <string.h>
 #include <arpa/inet.h> 
-#define SIZE 8192
+//#define SIZE 8192
 
-void send_file(FILE *file, int socket) {
-    /*fseek(file, 0L, SEEK_END);
-    // calculating the size of the file
-    long int size = ftell(file);
-    printf("Message: %d\n", size);*/
+/*void send_file(FILE *file, int socket) {
     char data[SIZE];
     while (fgets(data, SIZE, file) != NULL) {
         if (send(socket, data, sizeof(data), 0) == -1) {
@@ -23,7 +19,7 @@ void send_file(FILE *file, int socket) {
     bzero(data, SIZE);
     printf("Archivo enviado\n");
     fclose(file);
-}
+}*/
 
 void DocClient(char* ip, int port) {
 
@@ -55,11 +51,13 @@ void DocClient(char* ip, int port) {
 
         printf("Connection successful!\n");
         
-        char *filename;
+        char filename[20];
         char end[] = "end";
 
         printf("Ingrese la ruta del archivo:\n");
         scanf("%s", filename);
+
+        printf("Filename: %s\n", filename);
 
         int comparacion = strcmp(filename, &end);
         
@@ -72,9 +70,25 @@ void DocClient(char* ip, int port) {
             if (fp == NULL) {
                 perror("Error opening file!\n");
             } else {
-                send_file(fp, sockD);
+                fseek(fp, 0L, SEEK_END);
+  
+                // calculating the size of the file
+                int file_size = ftell(fp);
 
-                printf("Successful!\n");
+                fseek(fp, 0L, 0);
+
+                send(sockD, &file_size, sizeof(file_size), 0);
+
+                char data[file_size];
+
+                if (fgets(data, file_size, fp) != NULL)
+                {
+                    puts(data);
+                }
+                
+                send(sockD, data, sizeof(data), 0);
+
+                printf("Enviado!\n");
 
                 int received_int = 0;
 
