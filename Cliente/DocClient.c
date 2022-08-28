@@ -75,6 +75,8 @@ void DocClient(char* ip, int port) {
                 // calculating the size of the file
                 int file_size = ftell(fp);
 
+                file_size = file_size*2;
+
                 fseek(fp, 0L, 0);
 
                 send(sockD, &file_size, sizeof(file_size), 0);

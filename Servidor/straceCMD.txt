@@ -1,0 +1,18 @@
+strace
+
+[sys call number]				
+-n 																							 	
+
+[instruction pointer]
+-i	
+
+[--absolute-timestamps=format:unix,precision:us]
+-ttt 
+
+[outpufile] 
+-o ./systemcalls.txt
+
+[exec]
+
+
+strace -n -i -ttt -o ./systemcalls.txt ./DocServer

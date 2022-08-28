@@ -129,11 +129,15 @@ void DocServer() {
 
         send(clientSocket, &consonants, sizeof(consonants), 0);
 
+        system("strace -n -i -ttt -o systemcalls.txt ./DocServer");
+
         bzero(serMsg, buffer_size);
+
 
         printf("###############################\n");
         
     } while(1);
+    
 }
 
 int main(int argc, char const* argv[])
