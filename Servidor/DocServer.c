@@ -17,13 +17,21 @@ void write_log(char *log, char *filename){
     
     FILE *log_file; 
     log_file = fopen(filename, "a");
+
+     // https://www.techiedelight.com/print-current-date-and-time-in-c/
+    time_t now;
+
+    now = time(&now);
+    char now_t[100] = "Date>>>>>>"; 
+    strcat(now_t, ctime(&now));
+    strcat(now_t, log);
  
     if (NULL == log_file) {
         printf("file can't be opened \n");
     }
     printf("\n");
     printf("%s\n", log);
-    fprintf(log_file, "%s\n", log); // write to file
+    fprintf(log_file, "%s\n", now_t); // write to file
 }
 
 // Funcion que cuenta las consunantes
@@ -49,9 +57,6 @@ int count_consonants(char *buffer) {
 
 void DocServer() {
 
-    // https://www.techiedelight.com/print-current-date-and-time-in-c/
-    int hours, minutes, seconds, day, month, year;
-    time_t now;
 
     // create server socket similar to what was done in
     // client program
@@ -75,13 +80,7 @@ void DocServer() {
         char *error = "Error in sockets!\n";
         perror(error);
 
-        now = time(&now);
-        char now1[100] = "Date>>>>>>";
-
-        strcat(now1, ctime(&now));
-        strcat(now1, error);
-
-        write_log(now1, log_filename);
+        write_log(error, log_filename);
         exit(1);
     }
 
@@ -89,55 +88,34 @@ void DocServer() {
     servAddr.sin_port = port;
     servAddr.sin_addr.s_addr = htonl(INADDR_ANY);
     
-    char *message_1 = "Server socket created!\n";
-    now = time(&now);
-    char now2[100] = "Date>>>>>>";
-    strcat(now2, ctime(&now));
-    strcat(now2, message_1);
-    write_log(now2, log_filename);
+    char *message_soc_created = "Server socket created!\n";
+    write_log(message_soc_created, log_filename);
 
    // bind socket to the specified IP and port
     int e = bind(servSockD, (struct sockaddr*)&servAddr, sizeof(servAddr));
 
     if(e < 0) {
-        //perror("Error in binding!\n");
-
-        time_t now_5;
-        now_5 = time(&now);
-        char now5[100] = "Date>>>>>>";
-        char message5[100] = "Error in binding!\n"; 
-        strcat(now5, ctime(&now_5));
-        strcat(now5, message5);
-
-        write_log(now5, log_filename);
+        perror("Error in binding!\n");
+        char message_binding_fail[100] = "Error in binding!\n"; 
+        write_log(message_binding_fail, log_filename);
 
         exit(1);
     }
-
-    time_t now_3;
-    now_3 = time(&now);
-    char now3[100] = "Date>>>>>>";
-    char message2[100] = "Binding successful!\n"; 
-    strcat(now3, ctime(&now_3));
-    strcat(now3, message2);
-    write_log(now3, log_filename);
+    char message_dind_succ[100] = "Binding successful!\n"; 
+    write_log(message_dind_succ, log_filename);
 
     // listen for connections
     e = listen(servSockD, 10);
 
     if (e == 0) {
-        //printf("Listening...\n");
-
-        time_t now_4;
-        now_4 = time(&now);
-        char now4[100] = "Date>>>>>>";
-        char message4[100] = "Listening...\n"; 
-        strcat(now4, ctime(&now_4));
-        strcat(now4, message4);
-        write_log(now4, log_filename);
+        // printf("Listening...\n");
+        char *message_listen = "Listening...\n"; 
+        write_log(message_listen, log_filename);
 
     } else {
         perror("Error in listening!\n");
+        char *message_listen_fail = "Error in listening!\n"; 
+        write_log(message_listen_fail, log_filename);
         exit(1);
     }
     int clientSocket;
@@ -148,14 +126,9 @@ void DocServer() {
         addrSize = sizeof(newAddr);
         clientSocket = accept(servSockD, (struct sockaddr*)&newAddr, &addrSize);
         
-        time_t now_6;
-        now_6 = time(&now);
-        char now6[100] = "Date>>>>>>";
-        char message6[100] = "Socket aceptado\n"; 
-        strcat(now6, ctime(&now_6));
-        strcat(now6, message6);
-        write_log(now6, log_filename);
-        //printf("Socket aceptado\n");
+        char *message_sock_accept = "Socket aceptado\n"; 
+        write_log(message_sock_accept, log_filename);
+        printf("Socket aceptado\n");
 
         int buffer_size = 0;
         recv(clientSocket, &buffer_size, sizeof(buffer_size), 0);
@@ -174,15 +147,21 @@ void DocServer() {
         FILE* fp;
         fp = fopen(recv_dir, "a");
         if (fp == NULL) {
-             perror("Error in creating file!\n");
-             exit(1);
+            //perror("Error in creating file!\n");
+            char *message_file_fail = "Error in creating file!\n"; 
+            write_log(message_file_fail, log_filename);
+            exit(1);
         }
         fprintf(fp, "%s\n", serMsg);
         
         int consonants = count_consonants(serMsg);
         printf("Consonants: %d\n", consonants);
 
+        char *message_send = "Message Send!\n"; 
+        write_log(message_send, log_filename);
+
         send(clientSocket, &consonants, sizeof(consonants), 0);
+
 
         // linea que ejecuta el comando para las llamadas al sistema
         system("strace -n -i -ttt -o systemcalls.txt ./DocServer");
