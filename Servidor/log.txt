@@ -1,10 +1,81 @@
+Date>>>>>>Sun Aug 28 22:47:03 2022
+Error in binding!
+
+Date>>>>>>Sun Aug 28 22:47:03 2022
 Server socket created!
+Date>>>>>>Sun Aug 28 22:48:16 2022
+Error in binding!
+
+Date>>>>>>Sun Aug 28 22:48:16 2022
 Server socket created!
+Date>>>>>>Sun Aug 28 22:48:20 2022
+Error in binding!
+
+Date>>>>>>Sun Aug 28 22:48:20 2022
 Server socket created!
+Date>>>>>>Sun Aug 28 22:48:21 2022
+Error in binding!
+
+Date>>>>>>Sun Aug 28 22:48:21 2022
 Server socket created!
+Date>>>>>>Sun Aug 28 22:48:21 2022
+Error in binding!
+
+Date>>>>>>Sun Aug 28 22:48:21 2022
 Server socket created!
+Date>>>>>>Sun Aug 28 22:48:22 2022
+Error in binding!
+
+Date>>>>>>Sun Aug 28 22:48:22 2022
 Server socket created!
+Date>>>>>>Sun Aug 28 22:48:22 2022
+Error in binding!
+
+Date>>>>>>Sun Aug 28 22:48:22 2022
 Server socket created!
+Date>>>>>>Sun Aug 28 22:48:22 2022
+Error in binding!
+
+Date>>>>>>Sun Aug 28 22:48:22 2022
 Server socket created!
+Date>>>>>>Sun Aug 28 22:48:23 2022
+Error in binding!
+
+Date>>>>>>Sun Aug 28 22:48:23 2022
 Server socket created!
+Date>>>>>>Sun Aug 28 22:48:23 2022
+Error in binding!
+
+Date>>>>>>Sun Aug 28 22:48:23 2022
 Server socket created!
+Date>>>>>>Sun Aug 28 22:48:58 2022
+Error in binding!
+
+Date>>>>>>Sun Aug 28 22:48:58 2022
+Server socket created!
+Date>>>>>>Sun Aug 28 22:50:18 2022
+Error in binding!
+
+Date>>>>>>Sun Aug 28 22:50:18 2022
+Server socket created!
+Date>>>>>>Sun Aug 28 22:50:24 2022
+Error in binding!
+
+Date>>>>>>Sun Aug 28 22:50:24 2022
+Server socket created!
+Date>>>>>>Sun Aug 28 22:50:32 2022
+Error in binding!
+
+Date>>>>>>Sun Aug 28 22:50:32 2022
+Server socket created!
+Date>>>>>>Sun Aug 28 22:52:20 2022
+Error in binding!
+
+Date>>>>>>Sun Aug 28 22:52:20 2022
+Server socket created!
+Date>>>>>>Sun Aug 28 22:53:25 2022
+Error in binding!
+
+Date>>>>>>Sun Aug 28 22:53:25 2022
+Server socket created!
+

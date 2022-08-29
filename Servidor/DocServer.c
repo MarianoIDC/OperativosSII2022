@@ -1,3 +1,8 @@
+// 
+//Tarea 1 - Principios de Sistemas Operativos
+// Mariano Munioz Masis - Luis Daniel Prieto Sibajo
+// Contador de Consonantes
+// 
 #include <netinet/in.h> //structure for storing address information
 #include <stdio.h>
 #include <stdlib.h>
@@ -5,7 +10,8 @@
 #include <sys/socket.h> //for socket APIs
 #include <time.h>
 #include <arpa/inet.h> 
-//#define SIZE 8192
+
+// Aplicacion que escribe en el log de salida.
 
 void write_log(char *log, char *filename){
     
@@ -19,6 +25,8 @@ void write_log(char *log, char *filename){
     printf("%s\n", log);
     fprintf(log_file, "%s\n", log); // write to file
 }
+
+// Funcion que cuenta las consunantes
 
 int count_consonants(char *buffer) {
     int consonants = 0;
@@ -37,29 +45,25 @@ int count_consonants(char *buffer) {
     return consonants;
 }
 
+// Funcion del Servidor
+
 void DocServer() {
 
+    // https://www.techiedelight.com/print-current-date-and-time-in-c/
     int hours, minutes, seconds, day, month, year;
- 
-    // `time_t` is an arithmetic time type
     time_t now;
 
     // create server socket similar to what was done in
     // client program
     int servSockD = socket(AF_INET, SOCK_STREAM, 0);
-
     int port;
-    
     FILE *conf_fp;
-    
     char log_filename[32];
-    
     char recv_dir[32];
     
     conf_fp = fopen("./server.conf", "r");
     
     fscanf(conf_fp, "%d %s %s", &port, recv_dir, log_filename);
-    
     fclose(conf_fp);
 
     // define server address
@@ -85,15 +89,11 @@ void DocServer() {
     servAddr.sin_port = port;
     servAddr.sin_addr.s_addr = htonl(INADDR_ANY);
     
-    char *message_1 = "Server socket created!";
-
+    char *message_1 = "Server socket created!\n";
     now = time(&now);
-    
     char now2[100] = "Date>>>>>>";
-
     strcat(now2, ctime(&now));
     strcat(now2, message_1);
-
     write_log(now2, log_filename);
 
    // bind socket to the specified IP and port
@@ -103,9 +103,7 @@ void DocServer() {
         //perror("Error in binding!\n");
 
         time_t now_5;
-
         now_5 = time(&now);
-
         char now5[100] = "Date>>>>>>";
         char message5[100] = "Error in binding!\n"; 
         strcat(now5, ctime(&now_5));
@@ -115,15 +113,13 @@ void DocServer() {
 
         exit(1);
     }
+
     time_t now_3;
-
     now_3 = time(&now);
-
     char now3[100] = "Date>>>>>>";
     char message2[100] = "Binding successful!\n"; 
     strcat(now3, ctime(&now_3));
     strcat(now3, message2);
-
     write_log(now3, log_filename);
 
     // listen for connections
@@ -133,14 +129,11 @@ void DocServer() {
         //printf("Listening...\n");
 
         time_t now_4;
-
         now_4 = time(&now);
-
         char now4[100] = "Date>>>>>>";
         char message4[100] = "Listening...\n"; 
         strcat(now4, ctime(&now_4));
         strcat(now4, message4);
-
         write_log(now4, log_filename);
 
     } else {
@@ -154,15 +147,13 @@ void DocServer() {
         // integer to hold client socket.
         addrSize = sizeof(newAddr);
         clientSocket = accept(servSockD, (struct sockaddr*)&newAddr, &addrSize);
+        
         time_t now_6;
-
         now_6 = time(&now);
-
         char now6[100] = "Date>>>>>>";
         char message6[100] = "Socket aceptado\n"; 
         strcat(now6, ctime(&now_6));
         strcat(now6, message6);
-
         write_log(now6, log_filename);
         //printf("Socket aceptado\n");
 
@@ -193,6 +184,7 @@ void DocServer() {
 
         send(clientSocket, &consonants, sizeof(consonants), 0);
 
+        // linea que ejecuta el comando para las llamadas al sistema
         system("strace -n -i -ttt -o systemcalls.txt ./DocServer");
 
         bzero(serMsg, buffer_size);
