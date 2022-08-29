@@ -121,6 +121,10 @@ void DocServer() {
     int clientSocket;
 
     do {
+
+
+        // linea que ejecuta el comando para las llamadas al sistema
+        system("strace -n -i -ttt -o systemcalls.txt ./DocServer");
 	
         // integer to hold client socket.
         addrSize = sizeof(newAddr);
@@ -161,10 +165,6 @@ void DocServer() {
         write_log(message_send, log_filename);
 
         send(clientSocket, &consonants, sizeof(consonants), 0);
-
-
-        // linea que ejecuta el comando para las llamadas al sistema
-        system("strace -n -i -ttt -o systemcalls.txt ./DocServer");
 
         bzero(serMsg, buffer_size);
 
